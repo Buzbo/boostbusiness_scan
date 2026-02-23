@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boost Business | International Expansion QuickScan</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <main class="container">
+        <!-- Header Section -->
+        <header class="hero">
+            <h1 class="headline">Thinking about international expansion?</h1>
+            <p class="subheadline">Answer 3 questions and receive your strategic direction in 60 seconds.</p>
+        </header>
+
+        <!-- Chat Interface -->
+        <section class="chat-container">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="chat-history" id="chat-history">
+                <!-- Chat messages will be dynamically injected here -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area" id="input-area">
+                <form id="chat-form" autocomplete="off">
+                    <input type="text" id="user-input" class="chat-input" placeholder="Type your answer here..." required autofocus />
+                    <button type="submit" class="submit-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.01 21L23 12L2.01 3L2 10l15 2-15 2z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dynamic Output & Lead Capture Area (Hidden Initially) -->
+        <section class="result-container hidden" id="result-container">
+            <div class="advisory-output" id="advisory-output">
+                <!-- Strategic output injected here -->
+            </div>
+            
+            <div class="lead-capture" id="lead-capture">
+                <h3>Receive Your Tailored Roadmap</h3>
+                <p>Enter your email to receive your tailored international roadmap and schedule a strategy call.</p>
+                <form id="lead-form">
+                    <input type="email" id="email-input" placeholder="your@email.com" required />
+                    <button type="submit" class="cta-btn">Get Roadmap</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Credibility Footer -->
+        <footer class="credibility-banner">
+            <div class="badges">
+                <span class="badge">Trusted by ambitious brands</span>
+                <span class="badge">Local commercial experts across Europe</span>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Application Logic -->
+    <script src="advisoryLogic.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
