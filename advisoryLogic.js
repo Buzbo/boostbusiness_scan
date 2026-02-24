@@ -1,95 +1,125 @@
 /**
  * advisoryLogic.js
  * 
- * Rule-based engine for generating customized advisory output 
- * based on keyword detection in user inputs. No LLM calls.
+ * Local, rule-based logic engine that uses keyword matching on the user's
+ * free text inputs to distribute 7 targeted strategic paragraphs
+ * based on the Boost Business core methodologies.
  */
 
 const AdvisoryEngine = {
-    // Stage keywords and mapping
-    stages: {
-        idea: ["idea", "concept", "thinking", "starting", "scratch"],
-        early: ["early", "traction", "some sales", "just launched", "beginning", "validating"],
-        revenue: ["revenue", "generating", "selling", "growing", "steady"],
-        scaling: ["scale", "scaling", "fast", "growth", "expanding rapidly", "high volume"],
-        stuck: ["stuck", "plateau", "established", "flat", "stagnating", "hard time"]
-    },
 
-    // Goal keywords and mapping
-    goals: {
-        country: ["new country", "enter", "market entry", "new market", "border"],
-        marketplaces: ["marketplace", "amazon", "bol", "zalando", "platforms"],
-        distribution: ["distribution", "distributor", "retail", "b2b", "wholesale", "partners"],
-        full_expansion: ["full", "everything", "all out", "dominate", "aggressive", "overall strategy"]
-    },
+    // Core Distilled Knowledge Blocks based on 7 common problems
+    blocks: {
+        intro: `<p>Thank you for sharing your current status and goals. Expanding internationally is a major step. Statistics show that <strong>78% of B2B buyers</strong> prefer purchasing from local representatives who speak their language and understand their culture.</p>`,
 
-    // Service Needs mapping
-    services: {
-        retention: ["dedicated", "manager", "account", "country", "ongoing", "sales agent"],
-        project: ["one-time", "strategy", "analysis", "blueprint", "research"],
-        recruitment: ["finding", "talent", "hire", "recruiting", "payroll", "local employee"]
+        situation1: `<p><strong>1️⃣ Entering a New Country: Speed Through Local Commercial Execution</strong><br>
+Expanding into a new country is not a marketing exercise — it is a commercial execution challenge. The biggest delay in international growth is not strategy, but local access. Without relationships, cultural understanding and market credibility, growth slows down immediately.<br><br>
+The fastest and lowest-risk way to enter a new market is through deploying an experienced local commercial professional. Someone who already understands the ecosystem, speaks the language fluently and has an existing network within your target sector.<br><br>
+Boost Business specializes in seconding senior local sales professionals who represent your brand directly in-market. This gives you immediate traction without the risk and delay of building a full internal team from scratch. If long-term internal hiring is preferred, we can transition toward permanent recruitment once the market is validated.</p>`,
+
+        situation2: `<p><strong>2️⃣ Scaling Through Local Sales, Not Remote Management</strong><br>
+Many companies try to expand internationally from headquarters. They manage distributors remotely, follow up digitally and hope growth follows. In reality, revenue increases when someone local is physically present in the market.<br><br>
+Local sales execution means visiting clients, building relationships, negotiating pricing, opening doors, and managing commercial partnerships.<br><br>
+Boost Business deploys plug-and-play commercial experts who operate under your brand while remaining flexible. This allows you to scale up or down depending on seasonality or performance — without long-term payroll commitments. If your strategy evolves, we also support permanent recruitment to internalize the role.</p>`,
+
+        situation3: `<p><strong>3️⃣ Distribution Only Works When Locally Managed</strong><br>
+Signing a distributor does not equal growth. Distribution requires continuous commercial management, performance tracking and relationship building. Without local commercial oversight, distributors prioritize their own portfolio. Your product becomes secondary.<br><br>
+Boost Business provides either a local commercial professional managing distributor performance on your behalf, or the recruitment of a permanent country sales manager. This ensures distribution becomes an active revenue channel rather than a passive agreement.</p>`,
+
+        situation4: `<p><strong>4️⃣ Flexible Expansion Model: Detach First, Recruit Later</strong><br>
+International expansion carries uncertainty. Committing to full payroll in an unvalidated market increases financial risk. Recruiting locally feels too risky and expensive if it fails.<br><br>
+A phased approach is often more effective: Deploy a senior local commercial professional through secondment, validate traction and revenue potential, and transition to permanent recruitment if justified.<br><br>
+Boost Business operates exactly in this structure. Our core service is deploying experienced local commercial professionals who accelerate your market entry. This structure ensures faster market access, controlled cost and scalable growth.</p>`,
+
+        situation5: `<p><strong>5️⃣ Marketplace Growth Requires Local Expertise</strong><br>
+Marketplaces like Amazon and bol.com are powerful channels, but they are highly competitive and operationally complex. Success depends on local market insight, pricing discipline and advertising optimization.<br><br>
+Instead of building in-house expertise immediately, companies can leverage specialized marketplace professionals through a project-based or secondment model. Boost Business provides marketplace experts on a flexible basis, combining operational management with commercial oversight. This allows you to treat marketplaces as a strategic revenue channel without overbuilding internal structure.</p>`,
+
+        situation6: `<p><strong>6️⃣ We Have Revenue — But Growth Has Plateaued</strong><br>
+If international sales exist but growth is flat or plateaued, the issue is often local execution. Pricing may be misaligned. Key accounts are underdeveloped. Opportunities are not actively pursued.<br><br>
+Scaling requires renewed commercial energy in-market. Boost Business deploys senior local professionals who re-open pipelines, strengthen relationships and actively drive new business. Instead of adding complexity, we reinforce the commercial engine where it matters most.</p>`,
+
+        situation7: `<p><strong>7️⃣ We Invested Heavily — Now Expansion Must Deliver ROI</strong><br>
+After investing heavily in product development, expansion cannot become another cost center. Every new market must contribute to revenue recovery.<br><br>
+The challenge is accelerating ROI without increasing fixed overhead too quickly. Boost Business operates with flexible commercial deployment. You gain senior local expertise, immediate market access and measurable traction — without building full internal structures prematurely. This allows controlled scaling with aligned incentives and financial discipline.</p>`,
+
+        // The closer (Pushing for email)
+        outro: `<p>Every region requires a unique tactical approach. To identify exactly which of our 240+ local experts fits your specific needs in these markets, enter your email below. Our Commercial Director will review your inputs and personally reach out to you for a personalised roadmap.</p>`
     },
 
     /**
-     * Determines the category of an input string based on predefined keyword mapping.
+     * Checks if any given keywords exist within a text string.
      */
-    detectCategory(input, mappingObj) {
-        const lowerInputStr = input.toLowerCase();
-        for (const [category, keywords] of Object.entries(mappingObj)) {
-            if (keywords.some(kw => lowerInputStr.includes(kw))) {
-                return category;
-            }
-        }
-        return "other"; // fallback
+    hasAnyKeyword(text, keywords) {
+        const lowerText = text.toLowerCase();
+        return keywords.some(kw => lowerText.includes(kw));
     },
 
     /**
-     * Generates the 6-10 sentence advisory block based on detected parameters.
+     * Generates the advisory block using static Keyword matching.
      */
-    generateAdvisory(goalInput, stageInput, serviceInput, targetMarkets) {
-        const goalCategory = this.detectCategory(goalInput, this.goals);
-        const stageCategory = this.detectCategory(stageInput, this.stages);
-        const serviceCategory = this.detectCategory(serviceInput, this.services);
-        const markets = targetMarkets.trim() || "your target markets";
+    generateAdvisory: function (currentStatus, goals, previousAttempts) {
 
-        let output = "";
+        // Combine all user text to scan for intent broadly
+        const combinedText = `${currentStatus} ${goals} ${previousAttempts}`.toLowerCase();
 
-        // Complex conditional matrix building the strategic advisory response
+        let outputHTML = this.blocks.intro;
 
-        // 1. Retention / Dedicated Manager focused
-        if (serviceCategory === "retention") {
-            if (stageCategory === "early" || stageCategory === "idea") {
-                output = `Entering ${markets} at an early stage requires a lean, validation-first approach. Setting up a full local entity prematurely is a costly mistake. Instead, you need immediate 'feet on the ground' to validate commercial viability. We match you with a dedicated Country Manager from our exclusive portfolio of over 240+ commercial experts. They become an extension of your brand for 10 to 12 hours a week, instantly providing the local network, language skills, and cultural nuance you lack. We operate strictly on a retention plus success-fee model, ensuring our agents are fiercely incentivized to generate rapid local traction for you without the heavy overhead.`;
-            } else {
-                output = `Since you are already established and generating revenue, conquering ${markets} demands aggressive, localized penetration. Attempting cross-border sales from your current headquarters often bottlenecks growth. You need a dedicated, native B2B Account Manager. Our philosophy is 'no silos in business': our local professionals integrate directly into your CRM (like Hubspot) and operate as your localized commercial department. By tapping into our network of 240+ elite professionals in markets like the UK, DE, and ES, we can deploy a dedicated sales force in weeks. This allows you to scale rapidly without navigating complex foreign labor laws or entity setups.`;
-            }
+        // --- KEYWORD MATCHING ENGINE (7 SITUATIONS) --- //
+
+        // 1. Entering a New Country / Don't know where to start
+        const kwNewCountry = ["new country", "where to start", "germany", "explore", "don't know", "how to enter", "entry", "start from scratch"];
+
+        // 2. Remote Management / Headquarters issues
+        const kwRemote = ["remote", "headquarters", "distance", "emails", "from here", "internally", "our office"];
+
+        // 3. Distributor Issues
+        const kwDistributor = ["distributor", "partner", "agency", "underperforming", "reseller", "wholesale"];
+
+        // 4. Hiring Risk / Too Expensive
+        const kwHiringRisk = ["hire", "recruiting", "risky", "expensive", "payroll", "country manager", "full-time", "employ"];
+
+        // 5. Marketplaces
+        const kwMarketplace = ["amazon", "bol.com", "marketplace", "online", "e-commerce", "ecommerce", "webshop"];
+
+        // 6. Plateaued Growth / Flat Revenue
+        const kwPlateau = ["flat", "plateau", "revenue", "stagnate", "stuck", "no growth", "slow", "plateaued", "not growing"];
+
+        // 7. ROI / Heavy Investment
+        const kwROI = ["roi", "invest", "heavy", "cost", "return", "scale fast", "budget", "burn"];
+
+        // Determine which specific strategic block to serve based on priority
+        // Prioritize specific pain points (Plateau, ROI, Marketplaces, Distributors) before general ones
+
+        if (this.hasAnyKeyword(combinedText, kwPlateau)) {
+            outputHTML += this.blocks.situation6;
+        } else if (this.hasAnyKeyword(combinedText, kwDistributor)) {
+            outputHTML += this.blocks.situation3;
+        } else if (this.hasAnyKeyword(combinedText, kwMarketplace)) {
+            outputHTML += this.blocks.situation5;
+        } else if (this.hasAnyKeyword(combinedText, kwHiringRisk)) {
+            outputHTML += this.blocks.situation4;
+        } else if (this.hasAnyKeyword(combinedText, kwRemote)) {
+            outputHTML += this.blocks.situation2;
+        } else if (this.hasAnyKeyword(combinedText, kwROI)) {
+            outputHTML += this.blocks.situation7;
+        } else if (this.hasAnyKeyword(combinedText, kwNewCountry)) {
+            outputHTML += this.blocks.situation1;
+        } else {
+            // Default Fallback if no strong keywords are detected - provide Situation 1 (New Entry)
+            outputHTML += this.blocks.situation1;
         }
 
-        // 2. Project / Strategy focused
-        else if (serviceCategory === "project") {
-            output = `A successful push into ${markets} cannot rely on guesswork. Whether it is dominating Amazon EU, establishing B2B distribution, or building a direct sales engine, you first require a solid foundation. We deploy our senior commercial directors to execute a highly targeted Go-to-Market Analysis for your specific industry. We map the entire landscape: identifying the right Tier-1 partners, dissecting competitor models, and producing a concrete execution blueprint. Because we are operators, not just consultants, our strategy is built for immediate local execution. Once the roadmap is proven, we can easily transition to plugging our local experts into the field to drive the revenue.`;
-        }
+        // Always append the closing call to action
+        outputHTML += this.blocks.outro;
 
-        // 3. Recruitment focused
-        else if (serviceCategory === "recruitment") {
-            output = `Hiring permanent local sales talent in ${markets} is high-risk. The cost of a bad commercial hire in a foreign territory involves both capital loss and immense opportunity cost. Traditional recruitment agencies fail to understand the nuanced 'hunter' mentality required to open a new region. We bypass those agencies entirely. We leverage our proprietary database of 240+ proven international commercial experts to find the perfect match for your product category and culture. We handle the rigorous screening, ensuring your new hire already possesses the required local network to open doors from day one. They join your payroll directly, entirely de-risking your localization hire.`;
-        }
-
-        // 4. Fallback / Full Expansion Catch-all
-        else {
-            if (stageCategory === "stuck") {
-                output = `It is common to hit a growth plateau in ${markets} when initial organic momentum slows down. We suspect the bottleneck lies in either unoptimized local distribution, linguistic barriers, or simply a lack of direct local presence. Our core belief is that 78% of B2B buyers prefer purchasing from local representatives. We bypass your plateau by injecting immediate local momentum. From our network of 240+ commercial professionals, we deploy interim sales directors to diagnose your bottlenecks and execute rapid turnaround campaigns, restoring aggressive scaling to your foreign operations.`;
-            } else {
-                output = `A full, aggressive international expansion into ${markets} requires a meticulously synchronized commercial rollout. Success demands deep local networks and native understanding, which takes years to build organically. By partnering with Boost Business, you instantly gain an elite decentralized team. Whether you need a part-time Country Manager to validate early traction, or a strategic market-entry project, we provide the 'feet on the ground'. Our proven model offers maximum flexibility and localized execution without the burden of setting up foreign infrastructure.`;
-            }
-        }
-
-        // Add the generic CTA ending
-        output += `\n\n<br><strong>We have compiled a more detailed analysis and roadmap based on your inputs. Start your local journey with a dedicated booster by entering your email below.</strong>`;
-
-        return output;
+        // Return immediately (Simulating async behavior of the previous fetch for seamless UI)
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(outputHTML);
+            }, 600); // Slight delay for the typing indicator aesthetic
+        });
     }
 };
 
-// Make it available globally
 window.AdvisoryEngine = AdvisoryEngine;
