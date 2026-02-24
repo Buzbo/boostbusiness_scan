@@ -2,15 +2,19 @@
    CSS Reset & Variables
    ========================================= */
 :root {
-    /* Colors */
-    --bg-dark: #0f1115;
-    --bg-panel: rgba(26, 29, 36, 0.7);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --text-primary: #ffffff;
-    --text-secondary: #a1a1aa;
-    --accent-glow: #3b82f6; /* Blueish accent for Boost Business */
-    --accent-glow-secondary: #8b5cf6;
-    
+    /* Colors - Boost Business Brand */
+    --bg-dark: #f8fafc;
+    /* Clean light mode background for professionalism */
+    --bg-panel: #ffffff;
+    --border-color: rgba(45, 46, 131, 0.1);
+    /* Dark blue border */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --accent-primary: #2D2E83;
+    /* Boost Deep Blue */
+    --accent-secondary: #F8B946;
+    /* Boost Gold/Yellow */
+
     /* Typography */
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -62,19 +66,26 @@ body {
 .orb-1 {
     top: -10%;
     right: -10%;
-    background: var(--accent-glow);
+    background: var(--accent-primary);
 }
 
 .orb-2 {
     bottom: -10%;
     left: -10%;
-    background: var(--accent-glow-secondary);
+    background: var(--accent-secondary);
     animation-delay: -10s;
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-50px) scale(1.05); }
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-50px) scale(1.05);
+    }
 }
 
 /* =========================================
@@ -103,9 +114,7 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    background: linear-gradient(to right, #ffffff, #a1a1aa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent-primary);
     letter-spacing: -0.02em;
 }
 
@@ -148,7 +157,7 @@ body {
 .progress-bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--accent-glow), var(--accent-glow-secondary));
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -168,9 +177,11 @@ body {
 .chat-history::-webkit-scrollbar {
     width: 6px;
 }
+
 .chat-history::-webkit-scrollbar-track {
     background: transparent;
 }
+
 .chat-history::-webkit-scrollbar-thumb {
     background: var(--border-color);
     border-radius: 4px;
@@ -200,14 +211,14 @@ body {
 }
 
 .system .message-bubble {
-    background: rgba(255, 255, 255, 0.05);
+    background: #f1f5f9;
     border: 1px solid var(--border-color);
     border-bottom-left-radius: 4px;
     color: var(--text-primary);
 }
 
 .user .message-bubble {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(139, 92, 246, 0.8));
+    background: var(--accent-primary);
     border-bottom-right-radius: 4px;
     color: white;
 }
@@ -220,18 +231,18 @@ body {
 }
 
 .option-chip {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #f8fafc;
+    border: 1px solid var(--accent-primary);
     padding: 0.4rem 0.8rem;
     border-radius: 100px;
     font-size: 0.85rem;
-    color: var(--text-secondary);
+    color: var(--accent-primary);
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .option-chip:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--accent-primary);
     color: white;
     transform: translateY(-1px);
 }
@@ -244,16 +255,17 @@ body {
 #chat-form {
     display: flex;
     position: relative;
-    background: rgba(0, 0, 0, 0.3);
+    background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 100px;
     padding: 0.5rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 #chat-form:focus-within {
-    border-color: rgba(59, 130, 246, 0.5);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(45, 46, 131, 0.2);
 }
 
 .chat-input {
@@ -268,12 +280,12 @@ body {
 }
 
 .chat-input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-secondary);
 }
 
 .submit-btn {
-    background: var(--text-primary);
-    color: var(--bg-dark);
+    background: var(--accent-primary);
+    color: white;
     border: none;
     border-radius: 50%;
     width: 44px;
@@ -301,12 +313,10 @@ body {
    ========================================= */
 .result-container {
     background: var(--bg-panel);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    border: 1px solid var(--accent-secondary);
     border-radius: 24px;
     padding: 2.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(45, 46, 131, 0.15), 0 0 40px rgba(248, 185, 70, 0.1);
     animation: fadeInUp 0.8s ease-out forwards;
     margin-bottom: 2rem;
 }
@@ -317,7 +327,7 @@ body {
 
 .advisory-output {
     font-size: 1.05rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
     line-height: 1.7;
     margin-bottom: 2.5rem;
     padding-bottom: 2.5rem;
@@ -329,7 +339,7 @@ body {
 }
 
 .advisory-output strong {
-    color: white;
+    color: var(--accent-primary);
     font-weight: 600;
 }
 
@@ -351,18 +361,18 @@ body {
 
 #lead-form {
     display: flex;
-    gap: 0.75rem;
-    max-width: 450px;
+    justify-content: center;
+    width: 100%;
     margin: 0 auto;
 }
 
 #email-input {
     flex: 1;
-    background: rgba(0, 0, 0, 0.3);
+    background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0.875rem 1rem;
-    color: white;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 1rem;
     outline: none;
@@ -370,49 +380,55 @@ body {
 }
 
 #email-input:focus {
-    border-color: rgba(59, 130, 246, 0.5);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(45, 46, 131, 0.2);
 }
 
 .cta-btn {
-    background: linear-gradient(135deg, var(--accent-glow), var(--accent-glow-secondary));
+    background: var(--accent-primary);
     color: white;
     border: none;
-    border-radius: 8px;
-    padding: 0 1.5rem;
+    border-radius: 12px;
+    padding: 1.25rem 2.5rem;
     font-weight: 600;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.15rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(45, 46, 131, 0.2);
 }
 
 .cta-btn:hover {
-    box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
-    transform: translateY(-2px);
+    background: var(--accent-secondary);
+    color: var(--accent-primary);
+    box-shadow: 0 12px 25px -5px rgba(248, 185, 70, 0.6);
+    transform: translateY(-3px);
 }
 
 /* =========================================
    Footer / Credibility
    ========================================= */
 .credibility-banner {
+    width: 100%;
     margin-top: auto;
-    padding-top: 2rem;
-    opacity: 0.6;
-    animation: fadeIn 1s ease-out 1s forwards;
-    opacity: 0;
+    padding: 2rem 0;
+    background: var(--accent-primary);
+    color: white;
+    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.05);
 }
 
 .badges {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 2rem;
     flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .badge {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -421,7 +437,7 @@ body {
 .badge::before {
     content: "✓";
     display: inline-block;
-    color: #4ade80;
+    color: var(--accent-secondary);
     font-weight: bold;
 }
 
@@ -429,23 +445,51 @@ body {
    Animations
    ========================================= */
 @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideInUp {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 0.6; } /* Max opacity for footer */
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.6;
+    }
+
+    /* Max opacity for footer */
 }
 
 /* Typing Indicator Animation */
@@ -470,18 +514,66 @@ body {
     animation: typing 1.4s infinite ease-in-out both;
 }
 
-.typing-dot:nth-child(1) { animation-delay: -0.32s; }
-.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
 
 @keyframes typing {
-    0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-    40% { transform: scale(1); opacity: 1; }
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Footer Links Styling */
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.footer-links a {
+    color: var(--accent-secondary);
+    /* Boost Business Yellow */
+    transition: transform 0.2s ease, filter 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-links a:hover {
+    transform: scale(1.15);
+    filter: brightness(1.1);
 }
 
 /* Mobile Adjustments */
 @media (max-width: 600px) {
-    .headline { font-size: 2rem; }
-    .chat-container { padding: 1.25rem; }
-    #lead-form { flex-direction: column; }
-    .cta-btn { padding: 1rem; }
+    .headline {
+        font-size: 2rem;
+    }
+
+    .chat-container {
+        padding: 1.25rem;
+    }
+
+    #lead-form {
+        flex-direction: column;
+    }
+
+    .cta-btn {
+        padding: 1rem;
+    }
 }

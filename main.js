@@ -20,31 +20,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Conversation State
     let currentStep = 0;
-    const maxSteps = 4;
+    const maxSteps = 3;
     const answers = {
-        goal: "",
-        stage: "",
-        service: "",
-        markets: ""
+        currentStatus: "",
+        goals: "",
+        previousAttempts: ""
     };
 
     // Questions Sequence definition
     const questions = [
         {
-            text: "Welcome to Boost Business. What best describes your international expansion goal?",
-            options: ["Enter a new country", "Scale marketplaces", "Build distribution", "Hire local sales", "Full international expansion", "Other"]
+            text: "Welcome to Boost Business. To start, briefly tell us what your company does and where you are right now (which countries are you active in)?",
+            options: null
         },
         {
-            text: "Got it. What stage are you currently in with this goal?",
-            options: ["Idea phase", "Early traction", "Revenue generating", "Scaling", "Established but stuck"]
+            text: "Thanks! Briefly tell us where you would like to go internationally. What are your international goals?",
+            options: null
         },
         {
-            text: "What type of local commercial boost do you need most right now?",
-            options: ["Dedicated Country Manager", "One-time Market Entry Strategy", "Finding Local Talent"]
-        },
-        {
-            text: "Understood. Finally, what specific markets are you targeting? (You can type freely)",
-            options: null // Free text input only
+            text: "Got it. Finally, what have you already tried regarding international expansion? What worked and what didn't work?",
+            options: null
         }
     ];
 
@@ -170,16 +165,17 @@ document.addEventListener("DOMContentLoaded", () => {
         updateProgress();
         inputArea.classList.add("hidden");
 
+        // No longer relying on FormSubmit, so no hidden fields needed
+
         showTypingIndicator(() => {
             addMessage("Thank you. I am analyzing your inputs and generating your strategic direction...", "system");
 
-            setTimeout(() => {
-                // Generate the output using the rule engine
-                const outputHTML = window.AdvisoryEngine.generateAdvisory(
-                    answers.goal,
-                    answers.stage,
-                    answers.service,
-                    answers.markets
+            setTimeout(async () => {
+                // Generate the output using the OpenAI API rule engine
+                const outputHTML = await window.AdvisoryEngine.generateAdvisory(
+                    answers.currentStatus,
+                    answers.goals,
+                    answers.previousAttempts
                 );
 
                 // Show result container smoothly
@@ -216,10 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
         addMessage(val, "user");
 
         // Save to state
-        if (currentStep === 0) answers.goal = val;
-        else if (currentStep === 1) answers.stage = val;
-        else if (currentStep === 2) answers.service = val;
-        else if (currentStep === 3) answers.markets = val;
+        if (currentStep === 0) answers.currentStatus = val;
+        else if (currentStep === 1) answers.goals = val;
+        else if (currentStep === 2) answers.previousAttempts = val;
 
         currentStep++;
 
@@ -235,59 +230,54 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     leadForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const email = emailInput.value.trim();
-        if (!email) return;
 
         const submitBtnLead = leadForm.querySelector(".cta-btn");
         submitBtnLead.disabled = true;
-        submitBtnLead.textContent = "Processing...";
+        submitBtnLead.textContent = "Opening Email...";
 
-        // Create the structured data object
-        const leadData = {
-            email: email,
-            goal: answers.goal,
-            stage: answers.stage,
-            service_needed: answers.service,
-            target_markets: answers.markets,
-            advisory_type: window.AdvisoryEngine.detectCategory(answers.goal, window.AdvisoryEngine.goals) + "-" + window.AdvisoryEngine.detectCategory(answers.service, window.AdvisoryEngine.services),
-            created_at: new Date().toISOString()
-        };
-
-        // Simulate API call / save locally
-        setTimeout(() => {
-            // Save to LocalStorage to act as a mock database
-            let existingLeads = [];
-            try {
-                existingLeads = JSON.parse(localStorage.getItem('boostLeads')) || [];
-            } catch (err) {
-                console.error("Local storage error", err);
-            }
-
-            existingLeads.push(leadData);
-            localStorage.setItem('boostLeads', JSON.stringify(existingLeads));
-
-            // Console log for verification
-            console.log("LEAD CAPTURED:", JSON.stringify(leadData, null, 2));
-
-            // Optional: Provide a download of the JSON file automatically for the user to view
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(leadData, null, 2));
+        // Provide a download of the JSON file automatically for the user to view locally (Bonus)
+        try {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ ...answers }, null, 2));
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", `lead-${Date.now()}.json`);
-            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.setAttribute("download", `Boost-Business-QuickScan-Answers-${Date.now()}.json`);
+            document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
+        } catch (e) { }
 
-            // Success State
+        // Generate the mailto link
+        const subject = encodeURIComponent("QuickScan Request: Full Report Needed");
+        const body = encodeURIComponent(`Hello Boost Business,
+
+I have completed the Quick Internationalisation Expansion Scan. Please find my answers below and contact me with the full report.
+
+1. Current Status & Countries:
+${answers.currentStatus}
+
+2. International Goals:
+${answers.goals}
+
+3. Previous Attempts & Results:
+${answers.previousAttempts}
+
+Looking forward to your strategic advice!`);
+
+        const mailtoLink = `mailto:hello@boostbusiness.global?subject=${subject}&body=${body}`;
+
+        // Open the user's email client natively
+        window.location.href = mailtoLink;
+
+        // Update UI locally to show success.
+        setTimeout(() => {
             document.getElementById("lead-capture").innerHTML = `
                 <div style="animation: fadeInUp 0.5s ease-out;">
-                    <div style="font-size: 3rem; color: #4ade80; margin-bottom: 1rem;">&#10003;</div>
-                    <h3>Roadmap Sent</h3>
-                    <p style="color: var(--text-secondary)">Your customized roadmap has been sent to <strong>${email}</strong>. Our commercial director will be in touch shortly.</p>
+                    <div style="font-size: 3rem; color: var(--accent-secondary); margin-bottom: 1rem;">&#10003;</div>
+                    <h3>Almost there!</h3>
+                    <p style="color: var(--text-secondary)">Your email client has been opened automatically. <strong>Please send the prepared email</strong> to us, so we can start working on your customized roadmap.</p>
                 </div>
             `;
-
-        }, 1200);
+        }, 500);
     });
 
     // Start the conversation on load
