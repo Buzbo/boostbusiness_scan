@@ -77,9 +77,10 @@
                 <h3>Receive Your Full Report</h3>
                 <p>Click the button below to send your responses. Our Commercial Director will review your inputs and
                     personally reach out to you for a personalised roadmap.</p>
-                <!-- Native mailto triggered via JS -->
-                <form id="lead-form">
-                    <button type="submit" class="cta-btn">Request Full Report via Email</button>
+                <!-- Formspree Integration -->
+                <form id="lead-form" action="https://formspree.io/f/maqdvjjl" method="POST">
+                    <input type="email" name="email" id="email-input" placeholder="your@email.com" required />
+                    <button type="submit" class="cta-btn">Request Full Report</button>
                 </form>
             </div>
         </section>
